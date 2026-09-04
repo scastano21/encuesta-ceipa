@@ -53,7 +53,14 @@ export function SyncBanner({
           <button
             type="button"
             onClick={onSync}
-            disabled={!online || syncing || pendientes === 0}
+            disabled={!online || syncing}
+            title={
+              !online
+                ? "Sin conexión"
+                : pendientes === 0
+                  ? "No hay pendientes; puedes forzar una verificación"
+                  : `Sincronizar ${pendientes} pendiente(s)`
+            }
             className="rounded-lg bg-ceipa-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-ceipa-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Sincronizar ahora
