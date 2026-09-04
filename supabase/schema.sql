@@ -32,7 +32,9 @@ COMMENT ON COLUMN encuestas_ceipa.sincronizado IS 'Siempre true en Supabase; el 
 
 ALTER TABLE encuestas_ceipa ENABLE ROW LEVEL SECURITY;
 
--- INSERT público con anon key (sin login de encuestadores)
+-- Recrear política de INSERT (idempotente)
+DROP POLICY IF EXISTS "Permitir insert público" ON encuestas_ceipa;
+
 CREATE POLICY "Permitir insert público"
   ON encuestas_ceipa
   FOR INSERT
@@ -41,5 +43,4 @@ CREATE POLICY "Permitir insert público"
 
 -- Bloquear SELECT / UPDATE / DELETE públicos
 -- (sin políticas para estas operaciones, RLS deniega por defecto)
-
--- Opcional: permitir SELECT solo a service_role / dashboard (ya incluido por defecto)
+-- La app usa INSERT (no upsert) precisamente por esta restricción.

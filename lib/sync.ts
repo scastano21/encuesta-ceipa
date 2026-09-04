@@ -38,6 +38,15 @@ function toSupabasePayload(encuesta: EncuestaLocal) {
   };
 }
 
+function isDuplicateError(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes("duplicate") ||
+    m.includes("unique") ||
+    m.includes("already exists")
+  );
+}
+
 export async function sincronizarPendientes(): Promise<SyncResult> {
   const counts = await contarEncuestas();
 
@@ -84,40 +93,64 @@ export async function sincronizarPendientes(): Promise<SyncResult> {
     };
   }
 
-  const payload = pendientes.map(toSupabasePayload);
+  const syncedIds: string[] = [];
+  let lastError: string | null = null;
 
   try {
-    const { error } = await supabase.from("encuestas_ceipa").upsert(payload, {
-      onConflict: "id",
-      ignoreDuplicates: false,
-    });
+    // INSERT (no upsert): el upsert exige SELECT/UPDATE y rompe con RLS de solo-insert.
+    for (const encuesta of pendientes) {
+      const { error } = await supabase
+        .from("encuestas_ceipa")
+        .insert(toSupabasePayload(encuesta));
 
-    if (error) {
+      if (!error || isDuplicateError(error.message)) {
+        syncedIds.push(encuesta.id);
+        continue;
+      }
+
+      lastError = error.message;
+      break;
+    }
+
+    if (syncedIds.length > 0) {
+      await marcarSincronizadas(syncedIds);
+    }
+
+    const after = await contarEncuestas();
+
+    if (syncedIds.length === pendientes.length) {
       return {
-        ok: false,
-        synced: 0,
-        pending: pendientes.length,
-        total: counts.total,
-        message: `Error al sincronizar: ${error.message}`,
+        ok: true,
+        synced: syncedIds.length,
+        pending: after.pendientes,
+        total: after.total,
+        message: `Se sincronizaron ${syncedIds.length} encuesta(s) con Supabase.`,
       };
     }
 
-    await marcarSincronizadas(pendientes.map((e) => e.id));
-    const after = await contarEncuestas();
+    if (syncedIds.length > 0 && lastError) {
+      return {
+        ok: false,
+        synced: syncedIds.length,
+        pending: after.pendientes,
+        total: after.total,
+        message: `Se sincronizaron ${syncedIds.length}, pero quedaron pendientes: ${lastError}`,
+      };
+    }
 
     return {
-      ok: true,
-      synced: pendientes.length,
+      ok: false,
+      synced: 0,
       pending: after.pendientes,
       total: after.total,
-      message: `Se sincronizaron ${pendientes.length} encuesta(s) con Supabase.`,
+      message: `Error al sincronizar: ${lastError ?? "desconocido"}`,
     };
   } catch (err) {
     const msg = err instanceof Error ? err.message : "Error de red desconocido";
     return {
       ok: false,
-      synced: 0,
-      pending: pendientes.length,
+      synced: syncedIds.length,
+      pending: counts.pendientes,
       total: counts.total,
       message: `Falló la sincronización (datos locales intactos): ${msg}`,
     };
