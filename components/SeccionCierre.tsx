@@ -19,7 +19,7 @@ export function SeccionCierre({ data, onChange }: Props) {
 
       <label className="block text-sm">
         <span className="mb-1 block font-medium text-slate-700">
-          P10. ¿Hay algo que le gustaría que CEIPA supiera o mejorara?
+          P12. ¿Hay algo que le gustaría que CEIPA supiera o mejorara?
           <span className="ml-1 font-normal text-slate-400">(opcional)</span>
         </span>
         <textarea

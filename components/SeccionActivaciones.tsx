@@ -24,7 +24,7 @@ export function SeccionActivaciones({ data, onChange, errors }: Props) {
 
       <RadioGroup
         name="participo_activacion"
-        label="P8. ¿Ha visto o participado directamente en alguna actividad, stand o evento de CEIPA?"
+        label="P10. ¿Ha visto o participado directamente en alguna actividad, stand o evento de CEIPA?"
         options={PARTICIPO_OPCIONES}
         value={data.participo_activacion}
         onChange={(v) =>
@@ -41,7 +41,7 @@ export function SeccionActivaciones({ data, onChange, errors }: Props) {
       {data.participo_activacion === "Sí" && (
         <RadioGroup
           name="genero_interes"
-          label="P9. ¿Esa actividad le generó interés en conocer más sobre los programas de CEIPA?"
+          label="P11. ¿Esa actividad le generó interés en conocer más sobre los programas de CEIPA?"
           options={INTERES_OPCIONES}
           value={data.genero_interes}
           onChange={(v) =>

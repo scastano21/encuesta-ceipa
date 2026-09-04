@@ -3,6 +3,7 @@
 import type { EncuestaFormData } from "@/lib/types";
 import {
   EDAD_OPCIONES,
+  ESTRATO_OPCIONES,
   GENERO_OPCIONES,
   RESIDENCIA_OPCIONES,
 } from "@/lib/types";
@@ -106,6 +107,51 @@ export function SeccionPerfil({ data, onChange, errors, noAplica }: Props) {
               )}
             </label>
           )}
+
+          <fieldset className="space-y-3">
+            <legend className="text-sm font-medium text-slate-800">
+              P4. ¿En qué colegio estudia y en qué barrio/sector está ubicado?
+              <span className="ml-1 font-normal text-slate-400">
+                (si aplica)
+              </span>
+            </legend>
+            <label className="block text-sm">
+              <span className="mb-1 block font-medium text-slate-700">
+                Colegio
+              </span>
+              <input
+                type="text"
+                value={data.colegio}
+                onChange={(e) => onChange({ colegio: e.target.value })}
+                className="field-input"
+                placeholder="Nombre del colegio"
+              />
+            </label>
+            <label className="block text-sm">
+              <span className="mb-1 block font-medium text-slate-700">
+                Barrio/sector
+              </span>
+              <input
+                type="text"
+                value={data.barrio_sector}
+                onChange={(e) => onChange({ barrio_sector: e.target.value })}
+                className="field-input"
+                placeholder="Barrio o sector"
+              />
+            </label>
+          </fieldset>
+
+          <RadioGroup
+            name="estrato"
+            label="P5. ¿Cuál es su estrato socioeconómico?"
+            options={ESTRATO_OPCIONES}
+            value={data.estrato}
+            onChange={(v) =>
+              onChange({ estrato: v as EncuestaFormData["estrato"] })
+            }
+            error={errors.estrato}
+            required
+          />
         </>
       )}
     </section>

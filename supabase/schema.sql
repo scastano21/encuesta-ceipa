@@ -13,6 +13,9 @@ CREATE TABLE IF NOT EXISTS encuestas_ceipa (
   genero text,
   residencia text,
   residencia_otro text,
+  colegio text,
+  barrio_sector text,
+  estrato text,
   menciones_espontaneas jsonb,
   conoce_ceipa boolean,
   donde_escucho jsonb,
@@ -25,9 +28,17 @@ CREATE TABLE IF NOT EXISTS encuestas_ceipa (
   sincronizado boolean NOT NULL DEFAULT true
 );
 
+-- Si la tabla ya existía sin estas columnas, agrégalas:
+ALTER TABLE encuestas_ceipa ADD COLUMN IF NOT EXISTS colegio text;
+ALTER TABLE encuestas_ceipa ADD COLUMN IF NOT EXISTS barrio_sector text;
+ALTER TABLE encuestas_ceipa ADD COLUMN IF NOT EXISTS estrato text;
+
 COMMENT ON TABLE encuestas_ceipa IS 'Respuestas de la encuesta de awareness CEIPA sincronizadas desde la PWA';
-COMMENT ON COLUMN encuestas_ceipa.menciones_espontaneas IS 'Array con hasta 3 menciones espontáneas (P4)';
-COMMENT ON COLUMN encuestas_ceipa.donde_escucho IS 'Array de canales donde escuchó de CEIPA (P6)';
+COMMENT ON COLUMN encuestas_ceipa.menciones_espontaneas IS 'Array con hasta 3 menciones espontáneas (P6)';
+COMMENT ON COLUMN encuestas_ceipa.donde_escucho IS 'Array de canales donde escuchó de CEIPA (P8)';
+COMMENT ON COLUMN encuestas_ceipa.colegio IS 'Colegio donde estudia (P4, si aplica)';
+COMMENT ON COLUMN encuestas_ceipa.barrio_sector IS 'Barrio/sector del colegio (P4, si aplica)';
+COMMENT ON COLUMN encuestas_ceipa.estrato IS 'Estrato socioeconómico (P5)';
 COMMENT ON COLUMN encuestas_ceipa.sincronizado IS 'Siempre true en Supabase; el flag real vive en IndexedDB local';
 
 ALTER TABLE encuestas_ceipa ENABLE ROW LEVEL SECURITY;

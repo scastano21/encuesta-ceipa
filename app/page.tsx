@@ -45,6 +45,7 @@ function validateStep(
       if (data.residencia === "Otro" && !data.residencia_otro.trim()) {
         errors.residencia_otro = "Especifique la opción Otro.";
       }
+      if (!data.estrato) errors.estrato = "Seleccione el estrato.";
     }
   }
 
@@ -97,6 +98,9 @@ function buildLocalRecord(data: EncuestaFormData): EncuestaLocal {
       genero: null,
       residencia: null,
       residencia_otro: null,
+      colegio: null,
+      barrio_sector: null,
+      estrato: null,
       menciones_espontaneas: null,
       conoce_ceipa: null,
       donde_escucho: null,
@@ -125,6 +129,9 @@ function buildLocalRecord(data: EncuestaFormData): EncuestaLocal {
     residencia: data.residencia || null,
     residencia_otro:
       data.residencia === "Otro" ? data.residencia_otro.trim() || null : null,
+    colegio: data.colegio.trim() || null,
+    barrio_sector: data.barrio_sector.trim() || null,
+    estrato: data.estrato || null,
     menciones_espontaneas: menciones.length ? menciones : null,
     conoce_ceipa: data.conoce_ceipa,
     donde_escucho:
@@ -212,7 +219,7 @@ export default function HomePage() {
       };
       setErrors(finalErrs);
       if (Object.keys(finalErrs).length > 0) {
-        if (finalErrs.edad_rango || finalErrs.genero || finalErrs.residencia || finalErrs.residencia_otro) {
+        if (finalErrs.edad_rango || finalErrs.genero || finalErrs.residencia || finalErrs.residencia_otro || finalErrs.estrato) {
           setStep(0);
         } else if (
           finalErrs.menciones_espontaneas ||

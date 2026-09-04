@@ -27,7 +27,7 @@ export function SeccionAwareness({ data, onChange, errors }: Props) {
 
       <fieldset className="space-y-3">
         <legend className="text-sm font-medium text-slate-800">
-          P4. Sin pensarlo mucho, ¿qué instituciones de educación superior
+          P6. Sin pensarlo mucho, ¿qué instituciones de educación superior
           conoce, ya sea en Medellín o en general?
           <span className="text-red-600"> *</span>
         </legend>
@@ -64,7 +64,7 @@ export function SeccionAwareness({ data, onChange, errors }: Props) {
 
       <RadioGroup
         name="conoce_ceipa"
-        label="P5. ¿Ha escuchado hablar de CEIPA?"
+        label="P7. ¿Ha escuchado hablar de CEIPA?"
         options={["Sí", "No"]}
         value={
           data.conoce_ceipa === true
@@ -92,7 +92,7 @@ export function SeccionAwareness({ data, onChange, errors }: Props) {
       {conoceSi && (
         <>
           <CheckboxGroup
-            label="P6. ¿Dónde ha escuchado hablar de CEIPA o visto algo relacionado con esta institución?"
+            label="P8. ¿Dónde ha escuchado hablar de CEIPA o visto algo relacionado con esta institución?"
             options={DONDE_ESCUCHO_OPCIONES}
             values={data.donde_escucho}
             onChange={(values) =>
@@ -112,7 +112,7 @@ export function SeccionAwareness({ data, onChange, errors }: Props) {
 
           <label className="block text-sm">
             <span className="mb-1 block font-medium text-slate-700">
-              P7. Para usted, en una sola palabra, ¿qué es CEIPA?
+              P9. Para usted, en una sola palabra, ¿qué es CEIPA?
             </span>
             <input
               type="text"

@@ -37,6 +37,16 @@ export type GeneroInteres =
   | "No generó interés"
   | "";
 
+export type Estrato =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "No sabe / No aplica"
+  | "";
+
 export interface EncuestaFormData {
   encuestador: string;
   punto_aplicacion: string;
@@ -45,6 +55,9 @@ export interface EncuestaFormData {
   genero: Genero;
   residencia: Residencia;
   residencia_otro: string;
+  colegio: string;
+  barrio_sector: string;
+  estrato: Estrato;
   menciones_espontaneas: [string, string, string];
   conoce_ceipa: boolean | null;
   donde_escucho: DondeEscuchoOpcion[];
@@ -66,6 +79,9 @@ export interface EncuestaLocal {
   genero: string | null;
   residencia: string | null;
   residencia_otro: string | null;
+  colegio: string | null;
+  barrio_sector: string | null;
+  estrato: string | null;
   menciones_espontaneas: string[] | null;
   conoce_ceipa: boolean | null;
   donde_escucho: string[] | null;
@@ -130,6 +146,16 @@ export const INTERES_OPCIONES: GeneroInteres[] = [
   "No generó interés",
 ];
 
+export const ESTRATO_OPCIONES: Estrato[] = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "No sabe / No aplica",
+];
+
 export function createEmptyForm(): EncuestaFormData {
   const today = new Date().toISOString().slice(0, 10);
   return {
@@ -140,6 +166,9 @@ export function createEmptyForm(): EncuestaFormData {
     genero: "",
     residencia: "",
     residencia_otro: "",
+    colegio: "",
+    barrio_sector: "",
+    estrato: "",
     menciones_espontaneas: ["", "", ""],
     conoce_ceipa: null,
     donde_escucho: [],
